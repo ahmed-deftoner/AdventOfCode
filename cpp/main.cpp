@@ -33,6 +33,20 @@ int checkWindow(vector<int> x) {
     return checkIncreasing(sumArr);
 }
 
+int getPos(vector<int> pos,vector<string> command) {
+    int x = 0;
+    int y = 0;
+    for (int i = 0; i < pos.size(); ++i) {
+        if (command[i] == "forward") {
+            x += pos[i];
+        }else if (command[i] == "up") {
+            y -= pos[i];
+        }else if (command[i] == "down") {
+            y += pos[i];
+        }
+    }
+    return x * y;
+}
 
 int main(){
     fstream fin;
@@ -46,8 +60,7 @@ int main(){
         command.push_back(s.substr(0, pos));
         x.push_back(stoi(s.substr(pos + 1)));
     }
-    for (auto i: x) 
-        cout<<i<<endl;
+    cout<<getPos(x,command)<<endl;
     //cout<<checkWindow(x)<<endl;
     //cout<<count<<endl;
 }

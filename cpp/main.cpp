@@ -35,7 +35,7 @@ int checkWindow(vector<int> x) {
 
 int main(){
     fstream fin;
-    fin.open("data.txt", ios::in);
+    fin.open("/mnt/e/AdventOfCode/data.txt", ios::in);
     string s;
     vector<int> x;
     while(!fin.eof()){

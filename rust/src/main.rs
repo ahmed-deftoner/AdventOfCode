@@ -1,6 +1,6 @@
 use std::fmt::Display;
 use std::fs::File;
-use std::io::{BufRead, BufReader, Error, ErrorKind, Read, self};
+use std::io::{BufRead, BufReader, Error, ErrorKind, self};
 
 fn read(path : &str) -> Result<Vec<i64>, io::Error>{
     let file = File::open(path)?;
@@ -35,8 +35,40 @@ impl Display for NumVec {
     }
 }
 
+fn check_increasing(x: Vec<i64>) -> u64{
+    let mut count = 0;
+    for i in 1..x.len() {
+        if x[i-1] < x[i] {
+            count=count+1;
+        }
+    }
+    count
+}
+
+fn check_window(x: Vec<i64>) -> u64 {
+    let mut sum_arr = Vec::new();
+    let mut sum = 0;
+    let mut counter = 0;
+    let mut i = 0;
+    while i < x.len() {
+        if counter < 3 {
+            sum += x[i];
+            counter+=1;
+            i+=1;
+        }else if counter == 3 {
+            sum_arr.push(sum);
+            counter = 0;
+            sum = 0;
+            i-=2;
+        }
+    }
+    println!("{:?}",sum_arr);
+    return check_increasing(sum_arr);
+}
+
 fn main() {
     let mut numbers = NumVec(Vec::new());
     numbers.0 = read("/mnt/e/AdventOfCode/data.txt").unwrap();
-    print!("{numbers}");
+    let n = check_window(numbers.0);
+    println!("{:?}",n);
 }

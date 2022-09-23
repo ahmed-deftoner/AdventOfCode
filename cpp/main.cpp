@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <math.h>
 using namespace std;
 
 // Day 1a
@@ -85,9 +86,19 @@ void handle2(){
     cout<<getAim(x,command)<<endl;
 }
 
+int binaryToDecimal(string binary) {
+    int num = 0;
+    int i = 0;
+    for (int it = binary.length() - 1; it >= 0; it--) {
+        if (binary[it] == '1') {
+            num += pow(2.0, i);
+        }
+        i++;
+    }
+    return num;
+}
 // Day 3a
-
-void powerConsumption(vector<string> bits) {
+int powerConsumption(vector<string> bits) {
     vector<string>::iterator it;
     int len = bits[0].size();
     string gamma;
@@ -111,7 +122,7 @@ void powerConsumption(vector<string> bits) {
             epsilon.append("0");
         }
     }
-    cout << gamma << endl;
+    return binaryToDecimal(gamma) * binaryToDecimal(epsilon); 
 }
 
 int main(){
@@ -123,5 +134,5 @@ int main(){
         getline(fin, s);
         bits.push_back(s);
     }
-    powerConsumption(bits);
+    cout << powerConsumption(bits) << endl;
 }

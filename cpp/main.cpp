@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <math.h>
 using namespace std;
 
 // Day 1a
@@ -70,7 +71,7 @@ int getAim(vector<int> pos,vector<string> command) {
     return x * depth;
 }
 
-int main(){
+void handle2(){
     fstream fin;
     fin.open("/mnt/e/AdventOfCode/data2.txt", ios::in);
     string s;
@@ -83,6 +84,55 @@ int main(){
         x.push_back(stoi(s.substr(pos + 1)));
     }
     cout<<getAim(x,command)<<endl;
-    //cout<<checkWindow(x)<<endl;
-    //cout<<count<<endl;
+}
+
+int binaryToDecimal(string binary) {
+    int num = 0;
+    int i = 0;
+    for (int it = binary.length() - 1; it >= 0; it--) {
+        if (binary[it] == '1') {
+            num += pow(2.0, i);
+        }
+        i++;
+    }
+    return num;
+}
+// Day 3a
+int powerConsumption(vector<string> bits) {
+    vector<string>::iterator it;
+    int len = bits[0].size();
+    string gamma;
+    string epsilon;
+    for (int i = 0; i < len; ++i) {
+        int count0 = 0;
+        int count1 = 0;
+        for (it = bits.begin(); it < bits.end(); it++) {
+            string current = *it;
+            if (current[i] == '0') 
+                count0++;
+            else 
+                count1++;
+        }
+        if (count0 > count1) {
+            gamma.append("0");
+            epsilon.append("1");
+        } 
+        else {
+            gamma.append("1");
+            epsilon.append("0");
+        }
+    }
+    return binaryToDecimal(gamma) * binaryToDecimal(epsilon); 
+}
+
+int main(){
+    fstream fin;
+    fin.open("/mnt/e/AdventOfCode/data3.txt", ios::in);
+    string s;
+    vector<string> bits;
+    while(!fin.eof()){
+        getline(fin, s);
+        bits.push_back(s);
+    }
+    cout << powerConsumption(bits) << endl;
 }

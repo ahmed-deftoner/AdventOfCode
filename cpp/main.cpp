@@ -126,9 +126,58 @@ int powerConsumption(vector<string> bits) {
     return binaryToDecimal(gamma) * binaryToDecimal(epsilon); 
 }
 
-// Day 3b
-void lifeSupportRating(vector<string> &bits) {
+string carbomRating(vector<string> &bits) {
+    vector<string> carbon(bits);
+    vector<string>::iterator it;
+    int len = bits[0].size();
+    for (int i = 0; i < len; ++i) {
+        int count0 = 0;
+        int count1 = 0;
+        vector<int> index;
+        for (it = carbon.begin(); it < carbon.end(); it++) {
+            string current = *it;
+            if (current[i] == '0') 
+                count0++;
+            else 
+                count1++;
+        }
+        if (count0 < count1) {
+            for (int j = 0; j < carbon.size(); j++) {
+                if (carbon[j][i] == '0')
+                    index.push_back(j);
+            }
+           vector<string> x;
+            for (int j = 0; j < index.size(); j++) 
+                x.push_back(carbon[index[j]]);
+            carbon = x;
+        } else if (count0 > count1) {
+            for (int j = 0; j < carbon.size(); j++) {
+                if (carbon[j][i] == '1')
+                    index.push_back(j);
+            }
+            vector<string> x;
+            for (int j = 0; j < index.size(); j++) 
+                x.push_back(carbon[index[j]]);
+            carbon = x;
+        }else {
+            for (int j = 0; j < carbon.size(); j++) {
+                if (carbon[j][i] == '0')
+                    index.push_back(j);
+            }
+            vector<string> x;
+            for (int j = 0; j < index.size(); j++) {
+                x.push_back(carbon[index[j]]);
+            }
+            carbon = x;
+        }
+    }
+    return carbon[0];
+}
+
+
+string oxygenRating(vector<string> &bits) {
     vector<string> oxygen(bits);
+    vector<string> carbon(bits);
     vector<string>::iterator it;
     int len = bits[0].size();
     for (int i = 0; i < len; ++i) {
@@ -144,34 +193,40 @@ void lifeSupportRating(vector<string> &bits) {
         }
         if (count0 > count1) {
             for (int j = 0; j < oxygen.size(); j++) {
+                if (oxygen[j][i] == '0')
+                    index.push_back(j);
+            }
+           vector<string> x;
+            for (int j = 0; j < index.size(); j++) 
+                x.push_back(oxygen[index[j]]);
+            oxygen = x;
+        } else if (count0 < count1) {
+            for (int j = 0; j < oxygen.size(); j++) {
                 if (oxygen[j][i] == '1')
                     index.push_back(j);
             }
-            for (int j = 0; j < index.size(); j++) {
-                //cout<<oxygen[index[j]]<<" ";
-                oxygen.erase(oxygen.begin() + index[j]);
-            }
-        } else if (count0 < count1) {
-            for (int j = 0; j < oxygen.size(); j++) {
-                if (oxygen[j][i] == '0')
-                    index.push_back(j);
-            }
-            for (int j = 0; j < index.size(); j++) {
-                cout<<index[j]<<" ";
-                oxygen.erase(oxygen.begin() + index[j]);
-            }
-            cout<<endl;
+            vector<string> x;
+            for (int j = 0; j < index.size(); j++) 
+                x.push_back(oxygen[index[j]]);
+            oxygen = x;
         }else {
             for (int j = 0; j < oxygen.size(); j++) {
-                if (oxygen[j][i] == '0')
+                if (oxygen[j][i] == '1')
                     index.push_back(j);
             }
-            for (int j = 0; j < index.size(); j++)
-                oxygen.erase(oxygen.begin() + j);
+            vector<string> x;
+            for (int j = 0; j < index.size(); j++) {
+                x.push_back(oxygen[index[j]]);
+            }
+            oxygen = x;
         }
     }
-   for (auto i: oxygen) 
-       cout<<i<<endl;
+    return oxygen[0];
+}
+
+// Day 3b
+int lifeSupportRating(vector<string> &bits) {
+    return binaryToDecimal(oxygenRating(bits)) * binaryToDecimal(carbomRating(bits)); 
 }
 
 int main(){
@@ -184,5 +239,5 @@ int main(){
         bits.push_back(s);
     }
     ///cout << powerConsumption(bits) << endl;
-    lifeSupportRating(bits);
+    cout<<lifeSupportRating(bits);
 }

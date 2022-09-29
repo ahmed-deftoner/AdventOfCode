@@ -243,11 +243,30 @@ void handle3() {
     cout<<lifeSupportRating(bits);
 }
 
+// Day 4a
 struct Board
 {
     int arr[5][5];
 };
 
+
+void finalScore(vector<Board> &b, vector<int> moves) {
+    vector<Board>::iterator it;
+    for (int i = 0; i < moves.size(); i++) {
+        for (it = b.begin(); it != b.end(); ++it) {
+            Board x = *it;
+            for (int a = 0; a < 5; ++a) {
+                for (int b = 0; b < 5; ++b) {
+                    if (x.arr[a][b] == moves[i]) {
+                        x.arr[a][b] = -1;
+                    }
+                }
+            }
+        }
+        checkBingo(x);
+    }
+    
+}
 
 int main(){
     fstream fin;
@@ -271,6 +290,5 @@ int main(){
                 fin >> b.arr[i][j];
         boards.push_back(b);
     }
-    cout<< boards[2].arr[4][4];
-    
+    finalScore(boards, moves);
 }

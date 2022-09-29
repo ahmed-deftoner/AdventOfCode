@@ -280,24 +280,24 @@ bool checkBingo(Board b) {
         for (int j = 0; j < 5 && i == j; j++) {
            if (b.arr[i][j] != -1) {
                 bingod = false;
-                break;
+                return false;
            } 
         }
     }
     if (bingod == true) 
        return true;
     // check reverse diagonal
+    bool bingor = true;
     for (int i = 0; i < 5; i++) {
-        bool bingoy = true;
         for (int j = 0; j < 5 && i + j - 5; j++) {
            if (b.arr[i][j] != -1) {
-                bingoy = false;
+                bingor = false;
                 break;
            } 
         }
-        if (bingoy == true) 
-            return true;
     }
+    if (bingor == true) 
+        return true;
 }
 
 

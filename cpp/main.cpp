@@ -262,6 +262,7 @@ bool checkBingo(Board b) {
         if (bingoy == true) 
             return true;
     }
+    /*
     // check horizontal
     for (int i = 0; i < 5; i++) {
         bool bingox = true;
@@ -298,10 +299,20 @@ bool checkBingo(Board b) {
     }
     if (bingor == true) 
         return true;
+        */
     return false;
 }
 
-int unmarkedSum
+int unmarkedSum(Board b) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+           if (b.arr[i][j] != -1) 
+                sum += b.arr[i][j];
+        }
+    }
+    return sum;
+}
 
 
 void finalScore(vector<Board> &b, vector<int> moves) {
@@ -318,8 +329,10 @@ void finalScore(vector<Board> &b, vector<int> moves) {
                 }
             }
             bool a = checkBingo(*it);
-            if (a == true) 
-                cout << moves[i]<< endl;
+            if (a == true) { 
+                cout << moves[i] * unmarkedSum(*it) << endl;
+                return;
+            }
         }
     }
     

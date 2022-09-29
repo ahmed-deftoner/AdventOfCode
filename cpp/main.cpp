@@ -126,6 +126,7 @@ int powerConsumption(vector<string> bits) {
     return binaryToDecimal(gamma) * binaryToDecimal(epsilon); 
 }
 
+// Day 3b
 string carbomRating(vector<string> &bits) {
     vector<string> carbon(bits);
     vector<string>::iterator it;
@@ -174,7 +175,7 @@ string carbomRating(vector<string> &bits) {
     return carbon[0];
 }
 
-
+// Day 3b
 string oxygenRating(vector<string> &bits) {
     vector<string> oxygen(bits);
     vector<string> carbon(bits);
@@ -229,7 +230,7 @@ int lifeSupportRating(vector<string> &bits) {
     return binaryToDecimal(oxygenRating(bits)) * binaryToDecimal(carbomRating(bits)); 
 }
 
-int main(){
+void handle3() {
     fstream fin;
     fin.open("/mnt/e/AdventOfCode/data3.txt", ios::in);
     string s;
@@ -240,4 +241,25 @@ int main(){
     }
     ///cout << powerConsumption(bits) << endl;
     cout<<lifeSupportRating(bits);
+}
+
+int main(){
+    fstream fin;
+    fin.open("/mnt/e/AdventOfCode/data4.txt", ios::in);
+    string s;
+    vector<int> moves;
+    getline(fin, s);
+    int x = 0;
+    for (int i = 0; i <= s.length(); i++) {
+        if (s[i] == ',') {
+            moves.push_back(stoi(s.substr(x, i)));
+            x = i + 1;
+        }
+    }
+    moves.push_back(stoi(s.substr(x)));
+    for (auto i : moves)
+    {
+        cout<<i<<" ";
+    }
+    
 }

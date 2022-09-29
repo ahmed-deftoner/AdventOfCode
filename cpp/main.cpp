@@ -250,16 +250,30 @@ struct Board
 };
 
 bool checkBingo(Board b) {
+    // check vertical
     for (int i = 0; i < 5; i++) {
         bool bingoy = true;
         for (int j = 0; j < 5; j++) {
            if (b.arr[i][j] != -1) {
                 bingoy = false;
                 break;
-           }   
+           } 
         }
         if (bingoy == true) 
             return true;
+    }
+    // check horizontal
+    for (int i = 0; i < 5; i++) {
+        bool bingox = true;
+        for (int j = 0; j < 5; j++) {
+           if (b.arr[j][i] != -1) {
+                bingox = false;
+                break;
+           } 
+        }
+        if (bingox == true) 
+            return true;
+            
     }
     
 }

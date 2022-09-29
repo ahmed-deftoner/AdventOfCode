@@ -273,9 +273,31 @@ bool checkBingo(Board b) {
         }
         if (bingox == true) 
             return true;
-            
     }
-    
+    // check diagonal
+    bool bingod = true;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5 && i == j; j++) {
+           if (b.arr[i][j] != -1) {
+                bingod = false;
+                break;
+           } 
+        }
+    }
+    if (bingod == true) 
+       return true;
+    // check reverse diagonal
+    for (int i = 0; i < 5; i++) {
+        bool bingoy = true;
+        for (int j = 0; j < 5 && i + j - 5; j++) {
+           if (b.arr[i][j] != -1) {
+                bingoy = false;
+                break;
+           } 
+        }
+        if (bingoy == true) 
+            return true;
+    }
 }
 
 

@@ -262,7 +262,6 @@ bool checkBingo(Board b) {
         if (bingoy == true) 
             return true;
     }
-    /*
     // check horizontal
     for (int i = 0; i < 5; i++) {
         bool bingox = true;
@@ -275,31 +274,17 @@ bool checkBingo(Board b) {
         if (bingox == true) 
             return true;
     }
+    /*
     // check diagonal
-    bool bingod = true;
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5 && i == j; j++) {
-           if (b.arr[i][j] != -1) {
-                bingod = false;
-                break;
-           } 
-        }
-    }
-    if (bingod == true) 
-       return true;
+    if (b.arr[0][0] == -1 && b.arr[1][1] == -1 && b.arr[2][2] == -1 &&
+        b.arr[3][3] == -1 && b.arr[4][4] == -1) 
+            return true;
+        
     // check reverse diagonal
-    bool bingor = true;
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5 && i + j - 5; j++) {
-           if (b.arr[i][j] != -1) {
-                bingor = false;
-                break;
-           } 
-        }
-    }
-    if (bingor == true) 
+    if (b.arr[0][4] == -1 && b.arr[1][3] == -1 && b.arr[2][2] == -1 &&
+        b.arr[3][1] == -1 && b.arr[4][0] == -1) 
         return true;
-        */
+   */
     return false;
 }
 
@@ -315,7 +300,7 @@ int unmarkedSum(Board b) {
 }
 
 
-void finalScore(vector<Board> &b, vector<int> moves) {
+int finalScore(vector<Board> &b, vector<int> moves) {
     vector<Board>::iterator it;
     for (int i = 0; i < moves.size(); i++) {
         for (it = b.begin(); it != b.end(); ++it) {
@@ -329,13 +314,11 @@ void finalScore(vector<Board> &b, vector<int> moves) {
                 }
             }
             bool a = checkBingo(*it);
-            if (a == true) { 
-                cout << moves[i] * unmarkedSum(*it) << endl;
-                return;
-            }
+            if (a == true) 
+                return moves[i] * unmarkedSum(*it);
         }
     }
-    
+    return -1;
 }
 
 int main(){
@@ -360,5 +343,5 @@ int main(){
                 fin >> b.arr[i][j];
         boards.push_back(b);
     }
-    finalScore(boards, moves);
+    cout<<finalScore(boards, moves);
 }

@@ -243,11 +243,18 @@ void handle3() {
     cout<<lifeSupportRating(bits);
 }
 
+struct Board
+{
+    int arr[5][5];
+};
+
+
 int main(){
     fstream fin;
     fin.open("/mnt/e/AdventOfCode/data4.txt", ios::in);
     string s;
     vector<int> moves;
+    vector<Board> boards;
     getline(fin, s);
     int x = 0;
     for (int i = 0; i <= s.length(); i++) {
@@ -257,9 +264,13 @@ int main(){
         }
     }
     moves.push_back(stoi(s.substr(x)));
-    for (auto i : moves)
-    {
-        cout<<i<<" ";
+    while(!fin.eof()) {
+        Board b;
+        for (int i = 0; i < 5; ++i)
+            for (int j = 0; j < 5; ++j)
+                fin >> b.arr[i][j];
+        boards.push_back(b);
     }
+    cout<< boards[2].arr[4][4];
     
 }

@@ -249,6 +249,21 @@ struct Board
     int arr[5][5];
 };
 
+bool checkBingo(Board b) {
+    for (int i = 0; i < 5; i++) {
+        bool bingoy = true;
+        for (int j = 0; j < 5; j++) {
+           if (b.arr[i][j] != -1) {
+                bingoy = false;
+                break;
+           }   
+        }
+        if (bingoy == true) 
+            return true;
+    }
+    
+}
+
 
 void finalScore(vector<Board> &b, vector<int> moves) {
     vector<Board>::iterator it;

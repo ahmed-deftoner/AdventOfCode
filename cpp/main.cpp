@@ -280,7 +280,7 @@ bool checkBingo(Board b) {
         for (int j = 0; j < 5 && i == j; j++) {
            if (b.arr[i][j] != -1) {
                 bingod = false;
-                return false;
+                break;
            } 
         }
     }
@@ -298,23 +298,29 @@ bool checkBingo(Board b) {
     }
     if (bingor == true) 
         return true;
+    return false;
 }
+
+int unmarkedSum
 
 
 void finalScore(vector<Board> &b, vector<int> moves) {
     vector<Board>::iterator it;
     for (int i = 0; i < moves.size(); i++) {
         for (it = b.begin(); it != b.end(); ++it) {
-            Board x = *it;
+            int count = 0;
             for (int a = 0; a < 5; ++a) {
                 for (int b = 0; b < 5; ++b) {
-                    if (x.arr[a][b] == moves[i]) {
-                        x.arr[a][b] = -1;
+                    if (it->arr[a][b] == moves[i]) {
+                        it->arr[a][b] = -1;
+                        count++;
                     }
                 }
             }
+            bool a = checkBingo(*it);
+            if (a == true) 
+                cout << moves[i]<< endl;
         }
-        checkBingo(x);
     }
     
 }

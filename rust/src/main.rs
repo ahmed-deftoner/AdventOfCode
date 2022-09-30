@@ -123,8 +123,8 @@ fn safe_points(points: Vec<Point>) -> usize {
         max_y = max_y2;
     }
     println!("{:?}:{:?}",max_x,max_y);
-    let width = max_x+1;
-    let height = max_y+1;
+    let width = max_x+2;
+    let height = max_y+3;
 
     let mut temp_arr = vec![vec![0; width]; height];
     for i in 0..width {
@@ -157,6 +157,12 @@ fn safe_points(points: Vec<Point>) -> usize {
         }
     }
     let mut count = 0;
+   /*  for i in 0..width {
+        for j in 0..height {
+            print!("{:?} ",temp_arr[i][j]);
+        }
+        println!();
+    }*/
     for i in 0..width {
         for j in 0..height {
             if temp_arr[i][j] >= 2 {

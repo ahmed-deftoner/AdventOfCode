@@ -100,7 +100,7 @@ impl FromStr for Point {
     }
 }
 
-fn safe_points(points: Vec<Point>) {
+fn safe_points(points: Vec<Point>) -> usize {
     let mut arr = points.clone();
     let max_x: usize;
     let max_y: usize;
@@ -156,12 +156,15 @@ fn safe_points(points: Vec<Point>) {
             }
         }
     }
+    let mut count = 0;
     for i in 0..width {
         for j in 0..height {
-            print!("{:?} ",temp_arr[i][j]);
+            if temp_arr[i][j] >= 2 {
+                count += 1;
+            }
         }
-        println!();
     }
+    count
 }
 
 fn main() {
@@ -170,5 +173,5 @@ fn main() {
         .map(str::parse)
         .map(Result::unwrap)
         .collect();
-    safe_points(arr);
+    println!("{:?}",safe_points(arr));
 }

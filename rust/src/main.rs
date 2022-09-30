@@ -1,6 +1,7 @@
 use std::fmt::Display;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind, self};
+use std::str::FromStr;
 
 fn read(path : &str) -> Result<Vec<i64>, io::Error>{
     let file = File::open(path)?;
@@ -66,9 +67,44 @@ fn check_window(x: Vec<i64>) -> u64 {
     return check_increasing(sum_arr);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle1() {
     let mut numbers = NumVec(Vec::new());
     numbers.0 = read("/mnt/e/AdventOfCode/data.txt").unwrap();
     let n = check_window(numbers.0);
-    println!("{:?}",n);
+    println!("{:?}",n);  
+}
+
+struct Point {
+    x1: usize,
+    x2: usize,
+    y1: usize,
+    y2: usize
+}
+
+impl FromStr for Point {
+    type Err = std::string::ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (x, y) = s.split_once(" -> ").unwrap();
+        let (x1,y1) = x.split_once(",").unwrap();
+        let (x2,y2) = y.split_once(",").unwrap();
+        return Ok(Point{
+            x1: x1.parse().unwrap(),
+            y1: y1.parse().unwrap(),
+            x2: x2.parse().unwrap(),
+            y2: y2.parse().unwrap()
+        });
+    }
+}
+
+fn main() {
+    let str = include_str!("../../data5.txt");
+    let arr: Vec<Point> = str.lines()
+        .map(str::parse)
+        .map(Result::unwrap)
+        .collect();
+    for p in arr {
+        println!("{:?}", p.x1);
+    }
 }

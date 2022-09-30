@@ -274,17 +274,6 @@ bool checkBingo(Board b) {
         if (bingox == true) 
             return true;
     }
-    /*
-    // check diagonal
-    if (b.arr[0][0] == -1 && b.arr[1][1] == -1 && b.arr[2][2] == -1 &&
-        b.arr[3][3] == -1 && b.arr[4][4] == -1) 
-            return true;
-        
-    // check reverse diagonal
-    if (b.arr[0][4] == -1 && b.arr[1][3] == -1 && b.arr[2][2] == -1 &&
-        b.arr[3][1] == -1 && b.arr[4][0] == -1) 
-        return true;
-   */
     return false;
 }
 
@@ -299,7 +288,7 @@ int unmarkedSum(Board b) {
     return sum;
 }
 
-
+// Day 4a
 int finalScore(vector<Board> &b, vector<int> moves) {
     vector<Board>::iterator it;
     for (int i = 0; i < moves.size(); i++) {
@@ -319,6 +308,35 @@ int finalScore(vector<Board> &b, vector<int> moves) {
         }
     }
     return -1;
+}
+
+int lastScore(vector<Board> &b, vector<int> moves) {
+    vector<Board>::iterator it;
+    vector<int> score;
+    for (int i = 0; i < moves.size(); i++) {
+        int x = 0;
+        for (it = b.begin(); it != b.end(); ++it) {
+            int count = 0;
+            for (int a = 0; a < 5; ++a) {
+                for (int b = 0; b < 5; ++b) {
+                    if (it->arr[a][b] == moves[i]) {
+                        it->arr[a][b] = -1;
+                        count++;
+                    }
+                }
+            }
+            bool a = checkBingo(*it);
+            if (a == true) 
+                score.push_back(x);
+            x++;
+        }
+    }
+    for (auto i : score)
+    {
+        cout<<i<<" ";
+    }
+    
+    return 1;
 }
 
 int main(){
@@ -343,5 +361,5 @@ int main(){
                 fin >> b.arr[i][j];
         boards.push_back(b);
     }
-    cout<<finalScore(boards, moves);
+    cout<<lastScore(boards, moves);
 }

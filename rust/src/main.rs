@@ -75,6 +75,8 @@ fn handle1() {
     println!("{:?}",n);  
 }
 
+// Day 5a
+#[derive(Debug,Clone)]
 struct Point {
     x1: usize,
     x2: usize,
@@ -98,13 +100,42 @@ impl FromStr for Point {
     }
 }
 
+fn safe_points(points: Vec<Point>) {
+    let mut arr = points.clone();
+    let max_x: usize;
+    let max_y: usize;
+    arr.sort_by_key(|d| d.x1);
+    let max_x1 = arr[arr.len()-1].x1;
+    arr.sort_by_key(|d| d.x2);
+    let max_x2 = arr[arr.len()-1].x2;
+    if max_x1 >= max_x2 {
+        max_x = max_x1;
+    } else {
+        max_x = max_x2;
+    }
+    arr.sort_by_key(|d| d.y1);
+    let max_y1 = arr[arr.len()-1].y1;
+    arr.sort_by_key(|d| d.y2);
+    let max_y2 = arr[arr.len()-1].y2;
+    if max_y1 >= max_y2 {
+        max_y = max_y1;
+    } else {
+        max_y = max_y2;
+    }
+    println!("{:?}:{:?}",max_x,max_y);
+
+    for p in points {
+        if p.x1 == p.x2 {
+            
+        }
+    }
+}
+
 fn main() {
     let str = include_str!("../../data5.txt");
     let arr: Vec<Point> = str.lines()
         .map(str::parse)
         .map(Result::unwrap)
         .collect();
-    for p in arr {
-        println!("{:?}", p.x1);
-    }
+    safe_points(arr);
 }

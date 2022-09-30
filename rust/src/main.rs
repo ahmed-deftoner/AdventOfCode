@@ -1,6 +1,7 @@
 use std::fmt::Display;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind, self};
+use std::str::FromStr;
 
 fn read(path : &str) -> Result<Vec<i64>, io::Error>{
     let file = File::open(path)?;
@@ -66,9 +67,111 @@ fn check_window(x: Vec<i64>) -> u64 {
     return check_increasing(sum_arr);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle1() {
     let mut numbers = NumVec(Vec::new());
     numbers.0 = read("/mnt/e/AdventOfCode/data.txt").unwrap();
     let n = check_window(numbers.0);
-    println!("{:?}",n);
+    println!("{:?}",n);  
+}
+
+// Day 5a
+#[derive(Debug,Clone)]
+struct Point {
+    x1: usize,
+    x2: usize,
+    y1: usize,
+    y2: usize
+}
+
+impl FromStr for Point {
+    type Err = std::string::ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (x, y) = s.split_once(" -> ").unwrap();
+        let (x1,y1) = x.split_once(",").unwrap();
+        let (x2,y2) = y.split_once(",").unwrap();
+        return Ok(Point{
+            x1: x1.parse().unwrap(),
+            y1: y1.parse().unwrap(),
+            x2: x2.parse().unwrap(),
+            y2: y2.parse().unwrap()
+        });
+    }
+}
+
+fn safe_points(points: Vec<Point>) -> usize {
+    let mut arr = points.clone();
+    let max_x: usize;
+    let max_y: usize;
+    arr.sort_by_key(|d| d.x1);
+    let max_x1 = arr[arr.len()-1].x1;
+    arr.sort_by_key(|d| d.x2);
+    let max_x2 = arr[arr.len()-1].x2;
+    if max_x1 >= max_x2 {
+        max_x = max_x1;
+    } else {
+        max_x = max_x2;
+    }
+    arr.sort_by_key(|d| d.y1);
+    let max_y1 = arr[arr.len()-1].y1;
+    arr.sort_by_key(|d| d.y2);
+    let max_y2 = arr[arr.len()-1].y2;
+    if max_y1 >= max_y2 {
+        max_y = max_y1;
+    } else {
+        max_y = max_y2;
+    }
+    println!("{:?}:{:?}",max_x,max_y);
+    let width = max_x+1;
+    let height = max_y+1;
+
+    let mut temp_arr = vec![vec![0; width]; height];
+    for i in 0..width {
+        for j in 0..height {
+            temp_arr[i][j] = 0;
+        }
+    }
+    for p in points {
+        if p.x1 == p.x2 {
+            if p.y1 < p.y2 {
+                for i in p.y1..p.y2+1 {
+                    temp_arr[i][p.x1] += 1;
+                }
+            }else {
+                for i in p.y2..p.y1+1 {
+                    temp_arr[i][p.x1] += 1;
+                }
+            }
+        }
+        if p.y1 == p.y2 {
+            if p.x1 < p.x2 {
+                for i in p.x1..p.x2+1 {
+                    temp_arr[p.y1][i] += 1;
+                }
+            }else {
+                for i in p.x2..p.x1+1 {
+                    temp_arr[p.y1][i] += 1;
+                }
+            }
+        }
+    }
+    let mut count = 0;
+    for i in 0..width {
+        for j in 0..height {
+            if temp_arr[i][j] >= 2 {
+                count += 1;
+            }
+        }
+    }
+    count
+}
+
+fn main() {
+    let str = include_str!("../../data5.txt");
+    let arr: Vec<Point> = str.lines()
+        .map(str::parse)
+        .map(Result::unwrap)
+        .collect();
+    println!("{:?}",safe_points(arr));
 }

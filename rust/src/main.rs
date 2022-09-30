@@ -123,7 +123,17 @@ fn safe_points(points: Vec<Point>) {
         max_y = max_y2;
     }
     println!("{:?}:{:?}",max_x,max_y);
+    let width = max_x;
+    let height = max_y;
 
+    let mut tempArr = vec![vec![0; width]; height];
+    for i in 0..width {
+        for j in 0..height {
+            tempArr[i][j] = 0;
+            print!("{:?} ",tempArr[i][j]);
+        }
+        println!();
+    }
     for p in points {
         if p.x1 == p.x2 {
             

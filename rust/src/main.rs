@@ -123,8 +123,8 @@ fn safe_points(points: Vec<Point>) -> usize {
         max_y = max_y2;
     }
     println!("{:?}:{:?}",max_x,max_y);
-    let width = max_x+1;
-    let height = max_y+1;
+    let width = max_x+2;
+    let height = max_y+3;
 
     let mut temp_arr = vec![vec![0; width]; height];
     for i in 0..width {
@@ -138,7 +138,7 @@ fn safe_points(points: Vec<Point>) -> usize {
             let b = p.y2 - p.y1;
             if a == b {
                 for i in 0..a+1 {
-                    temp_arr[p.x1+i][p.y1+i] += 1;
+                    temp_arr[p.y1+i][p.x1+i] += 1;
                 }
             }   
         } else if p.x1 > p.x2 && p.y1 > p.y2 {
@@ -146,7 +146,7 @@ fn safe_points(points: Vec<Point>) -> usize {
             let b = p.y1 - p.y2;
             if a == b {
                 for i in 0..a+1 {
-                    temp_arr[p.x2+i][p.y2+i] += 1;
+                    temp_arr[p.y2+i][p.x2+i] += 1;
                 }
             }   
         } else if p.x1 > p.x2 && p.y1 < p.y2 {
@@ -155,7 +155,7 @@ fn safe_points(points: Vec<Point>) -> usize {
             if a == b {
                 let c = p.y2 - p.y1;
                 for i in 0..c+1 {
-                    temp_arr[p.x1-i][p.y1+i] += 1;
+                    temp_arr[p.y1+i][p.x1-i] += 1;
                 }
             }  
         } else if p.x2 > p.x1 && p.y2 < p.y1 {
@@ -164,11 +164,11 @@ fn safe_points(points: Vec<Point>) -> usize {
             if a == b {
                 let c = p.y1 - p.y2;
                 for i in 0..c+1 {
-                    temp_arr[p.x2-i][p.y2+i] += 1;
+                    temp_arr[p.y2+i][p.x2-i] += 1;
                 }
             }  
         } 
-        if p.x1 == p.x2 {
+        else if p.x1 == p.x2 {
             if p.y1 < p.y2 {
                 for i in p.y1..p.y2+1 {
                     temp_arr[i][p.x1] += 1;
@@ -179,7 +179,7 @@ fn safe_points(points: Vec<Point>) -> usize {
                 }
             }
         }
-        if p.y1 == p.y2 {
+        else if p.y1 == p.y2 {
             if p.x1 < p.x2 {
                 for i in p.x1..p.x2+1 {
                     temp_arr[p.y1][i] += 1;
@@ -193,12 +193,12 @@ fn safe_points(points: Vec<Point>) -> usize {
     }
 
     let mut count = 0;
-    for i in 0..width {
+/*     for i in 0..width {
         for j in 0..height {
             print!("{:?} ",temp_arr[i][j]);
         }
         println!();
-    }
+    }*/
     for i in 0..width {
         for j in 0..height {
             if temp_arr[i][j] >= 2 {

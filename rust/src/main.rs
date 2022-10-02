@@ -232,7 +232,7 @@ fn main() {
     for i in arr {
         temp[i as usize] += 1;
     }
-    for _ in 0..80 {
+    for _ in 0..256 {
         let d = temp[0];
         temp[0] = 0;
         for j in 1..9 {

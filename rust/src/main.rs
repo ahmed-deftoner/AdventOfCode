@@ -211,6 +211,7 @@ fn safe_points(points: Vec<Point>) -> usize {
     count
 }
 
+#[allow(dead_code)]
 fn handle5() {
     let str = include_str!("../../data5.txt");
     let arr: Vec<Point> = str.lines()
@@ -221,5 +222,13 @@ fn handle5() {
 }
 
 fn main() {
-  
+    let arr: Vec<u64> = include_str!("../../data6.txt")
+        .lines()
+        .take(1)
+        .flat_map(|x| x.split(","))
+        .map(|x| x.parse::<u64>().unwrap() )
+        .collect();
+    for i in arr {
+        println!("{:?}", i);
+    }
 }

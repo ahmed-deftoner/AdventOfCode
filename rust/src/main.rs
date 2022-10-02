@@ -133,6 +133,7 @@ fn safe_points(points: Vec<Point>) -> usize {
         }
     }
     for p in points {
+        // Day 5b
         if p.x2 > p.x1 && p.y2 > p.y1 {
             let a = p.x2 - p.x1;
             let b = p.y2 - p.y1;
@@ -168,6 +169,7 @@ fn safe_points(points: Vec<Point>) -> usize {
                 }
             }  
         } 
+        // Day 5a
         else if p.x1 == p.x2 {
             if p.y1 < p.y2 {
                 for i in p.y1..p.y2+1 {
@@ -209,11 +211,15 @@ fn safe_points(points: Vec<Point>) -> usize {
     count
 }
 
-fn main() {
+fn handle5() {
     let str = include_str!("../../data5.txt");
     let arr: Vec<Point> = str.lines()
         .map(str::parse)
         .map(Result::unwrap)
         .collect();
     println!("{:?}",safe_points(arr));
+}
+
+fn main() {
+  
 }

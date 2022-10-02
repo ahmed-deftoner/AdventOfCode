@@ -133,6 +133,7 @@ fn safe_points(points: Vec<Point>) -> usize {
         }
     }
     for p in points {
+        // Day 5b
         if p.x2 > p.x1 && p.y2 > p.y1 {
             let a = p.x2 - p.x1;
             let b = p.y2 - p.y1;
@@ -168,6 +169,7 @@ fn safe_points(points: Vec<Point>) -> usize {
                 }
             }  
         } 
+        // Day 5a
         else if p.x1 == p.x2 {
             if p.y1 < p.y2 {
                 for i in p.y1..p.y2+1 {
@@ -209,11 +211,37 @@ fn safe_points(points: Vec<Point>) -> usize {
     count
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle5() {
     let str = include_str!("../../data5.txt");
     let arr: Vec<Point> = str.lines()
         .map(str::parse)
         .map(Result::unwrap)
         .collect();
     println!("{:?}",safe_points(arr));
+}
+
+fn main() {
+    let arr: Vec<u64> = include_str!("../../data6.txt")
+        .lines()
+        .take(1)
+        .flat_map(|x| x.split(","))
+        .map(|x| x.parse::<u64>().unwrap() )
+        .collect();
+    let mut temp = vec![0; 9];
+    for i in arr {
+        temp[i as usize] += 1;
+    }
+    for _ in 0..256 {
+        let d = temp[0];
+        temp[0] = 0;
+        for j in 1..9 {
+            temp[j-1] = temp[j];
+            temp[j] = 0;
+        }
+        temp[6] += d;
+        temp[8] = d;
+    }
+    let sum: u64 = temp.iter().sum();
+    println!("{:?}", sum);
 }

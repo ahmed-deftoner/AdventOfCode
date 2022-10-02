@@ -228,7 +228,20 @@ fn main() {
         .flat_map(|x| x.split(","))
         .map(|x| x.parse::<u64>().unwrap() )
         .collect();
+    let mut temp = vec![0; 9];
     for i in arr {
-        println!("{:?}", i);
+        temp[i as usize] += 1;
     }
+    for _ in 0..80 {
+        let d = temp[0];
+        temp[0] = 0;
+        for j in 1..9 {
+            temp[j-1] = temp[j];
+            temp[j] = 0;
+        }
+        temp[6] += d;
+        temp[8] = d;
+    }
+    let sum: u64 = temp.iter().sum();
+    println!("{:?}", sum);
 }

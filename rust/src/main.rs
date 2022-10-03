@@ -256,10 +256,15 @@ fn main() {
     arr.sort();
     let mut result = Vec::new();
     let max = arr.last().unwrap();
+
     for i in 0..*max {
         let mut sum = 0;
         for j in &arr {
-            sum += j.abs_diff(i);
+            let mut local_sum = 0;
+            for k in 1..j.abs_diff(i)+1 {
+                local_sum += k;
+            }
+            sum += local_sum; 
         }
         result.push(sum);
     }

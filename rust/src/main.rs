@@ -248,10 +248,12 @@ fn handle6() {
 }
 
 fn main() {
-    let arr: Vec<u64> = include_str!("../../data7.txt")
+    let mut arr: Vec<u64> = include_str!("../../data7.txt")
         .lines()
         .flat_map(|x| x.split(","))
         .map(|x| x.parse::<u64>().unwrap())
         .collect();
-    println!("{:?}",arr);
+    arr.sort();
+
+    println!("{:?}",arr[arr.len()-1]);
 }

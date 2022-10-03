@@ -221,7 +221,8 @@ fn handle5() {
     println!("{:?}",safe_points(arr));
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle6() {
     let arr: Vec<u64> = include_str!("../../data6.txt")
         .lines()
         .take(1)
@@ -243,5 +244,14 @@ fn main() {
         temp[8] = d;
     }
     let sum: u64 = temp.iter().sum();
-    println!("{:?}", sum);
+    println!("{:?}", sum);  
+}
+
+fn main() {
+    let arr: Vec<u64> = include_str!("../../data7.txt")
+        .lines()
+        .flat_map(|x| x.split(","))
+        .map(|x| x.parse::<u64>().unwrap())
+        .collect();
+    println!("{:?}",arr);
 }

@@ -254,6 +254,15 @@ fn main() {
         .map(|x| x.parse::<u64>().unwrap())
         .collect();
     arr.sort();
-
-    println!("{:?}",arr[arr.len()-1]);
+    let mut result = Vec::new();
+    let max = arr.last().unwrap();
+    for i in 0..*max {
+        let mut sum = 0;
+        for j in &arr {
+            sum += j.abs_diff(i);
+        }
+        result.push(sum);
+    }
+    result.sort();
+    println!("{:?}", *result.first().unwrap());
 }

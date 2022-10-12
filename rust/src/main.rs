@@ -278,5 +278,11 @@ fn main() {
    let raw:Vec<&str> = include_str!("../../data8.txt")
         .lines()
         .collect();
+    for line in &raw {
+        let (input, output) = line.split_once(" | ").unwrap();
+        let input_arr: Vec<&str> = input.split(" ").collect();
+        let output_arr: Vec<&str> = output.split(" ").collect();
+        println!("{:?}", output_arr);
+    }
     println!("{:?}",raw[0]);
 }

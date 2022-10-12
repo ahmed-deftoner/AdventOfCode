@@ -247,12 +247,13 @@ fn handle6() {
     println!("{:?}", sum);  
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle7() {
     let mut arr: Vec<u64> = include_str!("../../data7.txt")
-        .lines()
-        .flat_map(|x| x.split(","))
-        .map(|x| x.parse::<u64>().unwrap())
-        .collect();
+    .lines()
+    .flat_map(|x| x.split(","))
+    .map(|x| x.parse::<u64>().unwrap())
+    .collect();
     arr.sort();
     let mut result = Vec::new();
     let max = arr.last().unwrap();
@@ -270,4 +271,12 @@ fn main() {
     }
     result.sort();
     println!("{:?}", *result.first().unwrap());
+}
+
+
+fn main() {
+   let raw:Vec<&str> = include_str!("../../data8.txt")
+        .lines()
+        .collect();
+    println!("{:?}",raw[0]);
 }

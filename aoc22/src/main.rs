@@ -19,5 +19,7 @@ fn main() {
             sums[idx] += i.parse::<u32>().unwrap();
         }
     }
-    println!("{:?}", max);
+    sums.sort();
+    let total: u32 = sums.pop().unwrap() + sums.pop().unwrap() + sums.pop().unwrap();
+    println!("{:?}", total);
 }

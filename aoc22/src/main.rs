@@ -26,11 +26,27 @@ fn handle1() {
 }
 
 fn main() {
+    let mut op: Vec<u8> = Vec::new();
+    let mut my: Vec<u8> = Vec::new();
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
     for line in input {
-        let (op, my) = line.split_once(" ");
-        
+        let (opp, myy) = line.split_once(" ").unwrap();
+        let valop: u8 = match opp {
+            "A" => 1,
+            "B" => 2,
+            "C" => 3,
+            _ => unreachable!()
+        };
+        let valmy: u8 = match myy {
+            "X" => 1,
+            "Y" => 2,
+            "Z" => 3,
+            _ => unreachable!()
+        };
+        op.push(valop);
+        my.push(valmy);
     }
+    println!("{:?}", op);
 }

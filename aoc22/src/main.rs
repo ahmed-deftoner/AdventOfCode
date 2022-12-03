@@ -44,10 +44,10 @@ fn main() {
             "Z" => 3,
             _ => unreachable!()
         };
-        if valmy > valop {
-            total += valmy + 6;   
+        if valmy == 1 && valop == 3 || valmy == 2 && valop == 1 || valmy == 3 && valop == 2 {
+            total += valmy + 6;
         } else if valmy == valop {
-            total += valmy + 3;
+            total += valmy + 3;  
         } else {
             total += valmy;
         }

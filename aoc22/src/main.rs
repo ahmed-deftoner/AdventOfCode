@@ -26,8 +26,6 @@ fn handle1() {
 }
 
 fn main() {
-    let mut op: Vec<u8> = Vec::new();
-    let mut my: Vec<u8> = Vec::new();
     let mut total: u32 = 0;
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
@@ -46,11 +44,19 @@ fn main() {
             "Z" => 3,
             _ => unreachable!()
         };
-        match valop.cmp(&valmy) {
-            std::cmp::Ordering::Less => total = total + 6 + valmy,
-            std::cmp::Ordering::Equal => total = total + valop + valmy,
-            std::cmp::Ordering::Greater => total = total + valmy,
+        if valmy > valop {
+            total += valmy + 6;   
+        } else if valmy == valop {
+            total += valmy + 3;
+        } else {
+            total += valmy;
         }
+        /* 
+        match valop.cmp(&valmy) {
+            std::cmp::Ordering::Less => total = total + 6 + valop,
+            std::cmp::Ordering::Equal => total = total + 3 + valop,
+            std::cmp::Ordering::Greater => total = total + valop,
+        }*/
     }
     println!("{:?}", total);
 }

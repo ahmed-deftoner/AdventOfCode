@@ -1,4 +1,4 @@
-use std::borrow::BorrowMut;
+use std::{borrow::BorrowMut, collections::HashMap};
 
 #[allow(dead_code)]
 fn handle1() {
@@ -27,6 +27,14 @@ fn handle1() {
 
 fn main() {
     let mut total: u32 = 0;
+    let mut losses = HashMap::new();
+    losses.insert(1, 3);
+    losses.insert(2, 1);
+    losses.insert(3, 2);
+    let mut wins = HashMap::new();
+    wins.insert(1, 2);
+    wins.insert(2, 3);
+    wins.insert(3, 1);
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
@@ -44,12 +52,12 @@ fn main() {
             "Z" => 3,
             _ => unreachable!()
         };
-        if valmy == 1 && valop == 3 || valmy == 2 && valop == 1 || valmy == 3 && valop == 2 {
-            total += valmy + 6;
-        } else if valmy == valop {
-            total += valmy + 3;  
+        if valmy == 1 {
+            total += losses[&valop];
+        } else if valmy == 2 {
+            total += valop + 3;  
         } else {
-            total += valmy;
+            total += wins[&valop] + 6;
         }
         /* 
         match valop.cmp(&valmy) {

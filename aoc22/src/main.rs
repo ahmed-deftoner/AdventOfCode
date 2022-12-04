@@ -25,7 +25,8 @@ fn handle1() {
     println!("{:?}", total);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle2() {
     let mut total: u32 = 0;
     let mut losses = HashMap::new();
     losses.insert(1, 3);
@@ -59,12 +60,10 @@ fn main() {
         } else {
             total += wins[&valop] + 6;
         }
-        /* 
-        match valop.cmp(&valmy) {
-            std::cmp::Ordering::Less => total = total + 6 + valop,
-            std::cmp::Ordering::Equal => total = total + 3 + valop,
-            std::cmp::Ordering::Greater => total = total + valop,
-        }*/
     }
     println!("{:?}", total);
+}
+
+fn main() {
+    
 }

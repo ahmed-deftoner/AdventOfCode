@@ -65,5 +65,11 @@ fn handle2() {
 }
 
 fn main() {
-    
+    let input: Vec<&str> = include_str!("../data1.txt")
+        .lines()
+        .collect();
+    for line in input {
+        let (first, second) = line.split_at(line.chars().count()/2);
+        println!("{:?},{:?}", first, second);
+    }
 }

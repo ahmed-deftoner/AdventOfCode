@@ -68,8 +68,16 @@ fn main() {
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
+    let mut total: u32 = 0;
     for line in input {
         let (first, second) = line.split_at(line.chars().count()/2);
         println!("{:?},{:?}", first, second);
+        for i in first.chars() {
+            let x = second.find(i);
+            if x != None {
+                total += i as u32;
+            }
+        }
+        println!("{:?}", total);
     }
 }

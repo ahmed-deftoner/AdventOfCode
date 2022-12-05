@@ -71,13 +71,20 @@ fn main() {
     let mut total: u32 = 0;
     for line in input {
         let (first, second) = line.split_at(line.chars().count()/2);
-        println!("{:?},{:?}", first, second);
+        let mut repeat: Vec<char> = Vec::new();
         for i in first.chars() {
             let x = second.find(i);
-            if x != None {
-                total += i as u32;
+            if x != None && !repeat.contains(&i) {
+                repeat.push(i);
+                if i.is_lowercase() {
+                    total += (i as u32) - 96;
+                } else {
+                    total += (i as u32) - 38;
+                }
             }
         }
-        println!("{:?}", total);
+        repeat.clear();
     }
+    println!("{:?}", total);
+
 }

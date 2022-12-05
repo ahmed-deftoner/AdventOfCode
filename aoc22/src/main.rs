@@ -69,21 +69,29 @@ fn main() {
         .lines()
         .collect();
     let mut total: u32 = 0;
+    let mut group: Vec<&str> = Vec::new();
+    let mut counter = 0;
     for line in input {
-        let (first, second) = line.split_at(line.chars().count()/2);
-        let mut repeat: Vec<char> = Vec::new();
-        for i in first.chars() {
-            let x = second.find(i);
-            if x != None && !repeat.contains(&i) {
-                repeat.push(i);
-                if i.is_lowercase() {
-                    total += (i as u32) - 96;
-                } else {
-                    total += (i as u32) - 38;
+        group.push(line);
+        counter+=1;
+        if counter == 3 {
+            let mut repeat: Vec<char> = Vec::new();
+            for i in group[0].chars() {
+                let x = group[1].find(i);
+                let y = group[2].find(i);
+                if x != None && y != None && !repeat.contains(&i) {
+                    repeat.push(i);
+                    if i.is_lowercase() {
+                        total += (i as u32) - 96;
+                    } else {
+                        total += (i as u32) - 38;
+                    }
                 }
-            }
+            }    
+            counter = 0;
+            group.clear();
+            repeat.clear();
         }
-        repeat.clear();
     }
     println!("{:?}", total);
 

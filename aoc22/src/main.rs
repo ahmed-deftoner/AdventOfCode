@@ -25,7 +25,8 @@ fn handle1() {
     println!("{:?}", total);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle2() {
     let mut total: u32 = 0;
     let mut losses = HashMap::new();
     losses.insert(1, 3);
@@ -59,12 +60,39 @@ fn main() {
         } else {
             total += wins[&valop] + 6;
         }
-        /* 
-        match valop.cmp(&valmy) {
-            std::cmp::Ordering::Less => total = total + 6 + valop,
-            std::cmp::Ordering::Equal => total = total + 3 + valop,
-            std::cmp::Ordering::Greater => total = total + valop,
-        }*/
     }
     println!("{:?}", total);
+}
+
+fn main() {
+    let input: Vec<&str> = include_str!("../data1.txt")
+        .lines()
+        .collect();
+    let mut total: u32 = 0;
+    let mut group: Vec<&str> = Vec::new();
+    let mut counter = 0;
+    for line in input {
+        group.push(line);
+        counter+=1;
+        if counter == 3 {
+            let mut repeat: Vec<char> = Vec::new();
+            for i in group[0].chars() {
+                let x = group[1].find(i);
+                let y = group[2].find(i);
+                if x != None && y != None && !repeat.contains(&i) {
+                    repeat.push(i);
+                    if i.is_lowercase() {
+                        total += (i as u32) - 96;
+                    } else {
+                        total += (i as u32) - 38;
+                    }
+                }
+            }    
+            counter = 0;
+            group.clear();
+            repeat.clear();
+        }
+    }
+    println!("{:?}", total);
+
 }

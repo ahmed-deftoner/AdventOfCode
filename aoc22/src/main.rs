@@ -101,5 +101,25 @@ fn main() {
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
-  
+    let mut count = 0;
+    for line in input {
+        let (a1,b1) = line.split_once(",").unwrap()
+            .0
+            .split_once("-")
+            .unwrap();
+        let (x1,y1) = line.split_once(",").unwrap()
+            .1
+            .split_once("-")
+            .unwrap();
+
+        let a = a1.parse::<u32>().unwrap();
+        let b = b1.parse::<u32>().unwrap();
+        let x = x1.parse::<u32>().unwrap();
+        let y = y1.parse::<u32>().unwrap();
+        if a >= x && b <= y || a <= x && b >= y {
+            count += 1;
+          //  println!("{:?},{:?},{:?},{:?}-1",a,b,x,y);
+        } 
+    }
+    println!("{:?}", count);
 }

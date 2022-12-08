@@ -116,7 +116,7 @@ fn main() {
         let b = b1.parse::<u32>().unwrap();
         let x = x1.parse::<u32>().unwrap();
         let y = y1.parse::<u32>().unwrap();
-        if a >= x && b <= y || a <= x && b >= y {
+        if b >= x && a <= y || a <= y && b >= x {
             count += 1;
           //  println!("{:?},{:?},{:?},{:?}-1",a,b,x,y);
         } 

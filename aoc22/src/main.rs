@@ -64,10 +64,11 @@ fn handle2() {
     println!("{:?}", total);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle3() {
     let input: Vec<&str> = include_str!("../data1.txt")
-        .lines()
-        .collect();
+    .lines()
+    .collect();
     let mut total: u32 = 0;
     let mut group: Vec<&str> = Vec::new();
     let mut counter = 0;
@@ -94,5 +95,11 @@ fn main() {
         }
     }
     println!("{:?}", total);
+}
 
+fn main() {
+    let input: Vec<&str> = include_str!("../data1.txt")
+        .lines()
+        .collect();
+  
 }

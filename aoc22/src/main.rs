@@ -97,7 +97,8 @@ fn handle3() {
     println!("{:?}", total);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle4() {
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
@@ -121,5 +122,84 @@ fn main() {
           //  println!("{:?},{:?},{:?},{:?}-1",a,b,x,y);
         } 
     }
-    println!("{:?}", count);
+    println!("{:?}", count); 
+}
+
+#[allow(dead_code)]
+fn handle5() {
+    let (stackstr, movestr) = include_str!("../data1.txt")
+        .split_once("\n\n")
+        .unwrap();
+    let stack_raw: Vec<&str> = stackstr.split("\n").collect();
+    let moves_raw: Vec<&str> = movestr.split("\n")
+        .collect();
+    let arr_size: usize = stack_raw.last()
+        .unwrap()
+        .split_at(stack_raw.last().unwrap().len()-2)
+        .1
+        .trim_end()
+        .parse::<usize>()
+        .unwrap();
+    let mut stack: Vec<Vec<char>> = vec![vec![]; arr_size]; 
+    let mut stack_count: i32 = (stack_raw.len() - 2 ).try_into().unwrap();
+    while stack_count != -1 {
+        let mut arr_count = 0;
+        let last_iter = stack_raw.last().unwrap().chars().enumerate();
+        for (idx, c) in last_iter {
+            if c != ' ' {
+                let x = stack_raw[stack_count as usize].chars().nth(idx).unwrap();
+                if x != ' ' {
+                    stack[arr_count].push(x);                   
+                }
+                arr_count += 1; 
+            }
+        }   
+        stack_count -= 1;
+    }
+    for i in moves_raw {
+        let temp: Vec<&str> = i.split_whitespace()
+                    .collect();
+        let num = temp[1].parse::<u32>().unwrap();
+        let from = temp[3].parse::<u32>().unwrap();
+        let to = temp[5].parse::<u32>().unwrap();
+        let mut temp_arr: Vec<char> = Vec::new();
+        for _ in 0..num {
+            let temp = stack[(from - 1) as usize].pop().unwrap();
+            temp_arr.push(temp);
+        }
+        temp_arr.reverse();
+        for x in &temp_arr {
+            stack[(to - 1) as usize].push(*x);
+        }
+        temp_arr.clear();
+    }
+    let mut result: String = String::new();
+    for i in stack.iter_mut() {
+        let temp: &str = &i.pop().unwrap().to_string();
+        result = format!("{}{}", result, temp);
+    }
+    println!("{:?}", result); 
+}
+
+fn main() {
+    let input = include_str!("../data1.txt");
+    let mut n = 14;
+    for _ in 0..input.len() - 1 {
+        let mut found: bool = false;
+        let substr = input.get(n-14..n).unwrap();
+        for c in substr.chars() {
+            let temp_str = substr.replacen(c, "", 1);
+            if temp_str.contains(c) {
+                n += 1;
+                found = false;
+                break;
+            } else {
+                found = true;
+            }
+        }
+        if found == true {
+            println!("{:?}", n);
+            break;
+        }
+    }
 }

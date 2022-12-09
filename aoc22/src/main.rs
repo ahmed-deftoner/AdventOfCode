@@ -161,10 +161,16 @@ fn main() {
         let num = temp[1].parse::<u32>().unwrap();
         let from = temp[3].parse::<u32>().unwrap();
         let to = temp[5].parse::<u32>().unwrap();
+        let mut temp_arr: Vec<char> = Vec::new();
         for _ in 0..num {
             let temp = stack[(from - 1) as usize].pop().unwrap();
-            stack[(to - 1) as usize].push(temp);
+            temp_arr.push(temp);
         }
+        temp_arr.reverse();
+        for x in &temp_arr {
+            stack[(to - 1) as usize].push(*x);
+        }
+        temp_arr.clear();
     }
     let mut result: String = String::new();
     for i in stack.iter_mut() {

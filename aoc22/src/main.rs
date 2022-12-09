@@ -126,8 +126,10 @@ fn handle4() {
 }
 
 fn main() {
-    let input: Vec<&str> = include_str!("../data1.txt")
-        .lines()
-        .collect();
-    
+    let (stackstr, movestr) = include_str!("../data1.txt")
+        .split_once("\n\n")
+        .unwrap();
+    let stack: Vec<&str> = stackstr.split("\n").collect();
+    let moves: Vec<&str> = movestr.split("\n").collect();
+    println!("{:?}", stack);
 }

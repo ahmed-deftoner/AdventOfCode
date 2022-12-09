@@ -141,13 +141,18 @@ fn main() {
     let mut stack: Vec<Vec<char>> = vec![vec![]; arr_size]; 
     let mut stack_count: i32 = (stack_raw.len() - 2 ).try_into().unwrap();
     while stack_count != -1 {
+        let mut arr_count = 0;
         let last_iter = stack_raw.last().unwrap().chars().enumerate();
         for (idx, c) in last_iter {
             if c != ' ' {
-                println!("{:?}", stack_raw[stack_count as usize].chars().nth(idx).unwrap());    
+                let x = stack_raw[stack_count as usize].chars().nth(idx).unwrap();
+                if x != ' ' {
+                    stack[arr_count].push(x);                   
+                }
+                arr_count += 1; 
             }
         }   
         stack_count -= 1;
     }
-    println!("{:?}", arr_size);
+    println!("{:?}", stack);
 }

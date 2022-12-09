@@ -183,10 +183,10 @@ fn handle5() {
 
 fn main() {
     let input = include_str!("../data1.txt");
-    let mut n = 4;
+    let mut n = 14;
     for _ in 0..input.len() - 1 {
         let mut found: bool = false;
-        let substr = input.get(n-4..n).unwrap();
+        let substr = input.get(n-14..n).unwrap();
         for c in substr.chars() {
             let temp_str = substr.replacen(c, "", 1);
             if temp_str.contains(c) {

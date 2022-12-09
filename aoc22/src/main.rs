@@ -97,7 +97,8 @@ fn handle3() {
     println!("{:?}", total);
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle4() {
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
@@ -121,5 +122,12 @@ fn main() {
           //  println!("{:?},{:?},{:?},{:?}-1",a,b,x,y);
         } 
     }
-    println!("{:?}", count);
+    println!("{:?}", count); 
+}
+
+fn main() {
+    let input: Vec<&str> = include_str!("../data1.txt")
+        .lines()
+        .collect();
+    
 }

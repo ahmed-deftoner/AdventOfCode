@@ -139,12 +139,15 @@ fn main() {
         .parse::<usize>()
         .unwrap();
     let mut stack: Vec<Vec<char>> = vec![vec![]; arr_size]; 
-    let last_iter = stack_raw.last().unwrap().chars().enumerate();
-    let mut stack_count = stack_raw.len() - 2;
-    for (idx, c) in last_iter {
-        if c != ' ' {
-            println!("{:?}", stack_raw[stack_count].chars().nth(idx).unwrap());        
-        }
+    let mut stack_count: i32 = (stack_raw.len() - 2 ).try_into().unwrap();
+    while stack_count != -1 {
+        let last_iter = stack_raw.last().unwrap().chars().enumerate();
+        for (idx, c) in last_iter {
+            if c != ' ' {
+                println!("{:?}", stack_raw[stack_count as usize].chars().nth(idx).unwrap());    
+            }
+        }   
+        stack_count -= 1;
     }
     println!("{:?}", arr_size);
 }

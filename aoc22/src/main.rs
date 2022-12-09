@@ -125,7 +125,8 @@ fn handle4() {
     println!("{:?}", count); 
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle5() {
     let (stackstr, movestr) = include_str!("../data1.txt")
         .split_once("\n\n")
         .unwrap();
@@ -177,5 +178,9 @@ fn main() {
         let temp: &str = &i.pop().unwrap().to_string();
         result = format!("{}{}", result, temp);
     }
-    println!("{:?}", result);
+    println!("{:?}", result); 
+}
+
+fn main() {
+   
 }

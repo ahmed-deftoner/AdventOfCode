@@ -1,4 +1,4 @@
-use std::{borrow::BorrowMut, collections::HashMap};
+use std::{borrow::BorrowMut, collections::HashMap, mem::replace};
 
 #[allow(dead_code)]
 fn handle1() {
@@ -129,16 +129,22 @@ fn main() {
     let (stackstr, movestr) = include_str!("../data1.txt")
         .split_once("\n\n")
         .unwrap();
-    let stack: Vec<&str> = stackstr.split("\n").collect();
+    let stack_raw: Vec<&str> = stackstr.split("\n").collect();
     let moves: Vec<&str> = movestr.split("\n").collect();
-    let arr_size: usize = stack.last()
+    let arr_size: usize = stack_raw.last()
         .unwrap()
-        .split_at(stack.last().unwrap().len()-2)
+        .split_at(stack_raw.last().unwrap().len()-2)
         .1
         .trim_end()
         .parse::<usize>()
         .unwrap();
-    let mut stack: Vec<Vec<char>> = vec![vec![]; arr_size];  
-    
+    let mut stack: Vec<Vec<char>> = vec![vec![]; arr_size]; 
+    let last_iter = stack_raw.last().unwrap().chars().enumerate();
+    let mut stack_count = stack_raw.len() - 2;
+    for (idx, c) in last_iter {
+        if c != ' ' {
+            println!("{:?}", stack_raw[stack_count].chars().nth(idx).unwrap());        
+        }
+    }
     println!("{:?}", arr_size);
 }

@@ -131,5 +131,14 @@ fn main() {
         .unwrap();
     let stack: Vec<&str> = stackstr.split("\n").collect();
     let moves: Vec<&str> = movestr.split("\n").collect();
-    println!("{:?}", stack);
+    let arr_size: usize = stack.last()
+        .unwrap()
+        .split_at(stack.last().unwrap().len()-2)
+        .1
+        .trim_end()
+        .parse::<usize>()
+        .unwrap();
+    let mut stack: Vec<Vec<char>> = vec![vec![]; arr_size];  
+    
+    println!("{:?}", arr_size);
 }

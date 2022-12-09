@@ -1,4 +1,4 @@
-use std::{borrow::BorrowMut, collections::HashMap, mem::replace};
+use std::{borrow::BorrowMut, collections::HashMap};
 
 #[allow(dead_code)]
 fn handle1() {
@@ -130,7 +130,8 @@ fn main() {
         .split_once("\n\n")
         .unwrap();
     let stack_raw: Vec<&str> = stackstr.split("\n").collect();
-    let moves: Vec<&str> = movestr.split("\n").collect();
+    let moves_raw: Vec<&str> = movestr.split("\n")
+        .collect();
     let arr_size: usize = stack_raw.last()
         .unwrap()
         .split_at(stack_raw.last().unwrap().len()-2)
@@ -154,5 +155,21 @@ fn main() {
         }   
         stack_count -= 1;
     }
-    println!("{:?}", stack);
+    for i in moves_raw {
+        let temp: Vec<&str> = i.split_whitespace()
+                    .collect();
+        let num = temp[1].parse::<u32>().unwrap();
+        let from = temp[3].parse::<u32>().unwrap();
+        let to = temp[5].parse::<u32>().unwrap();
+        for _ in 0..num {
+            let temp = stack[(from - 1) as usize].pop().unwrap();
+            stack[(to - 1) as usize].push(temp);
+        }
+    }
+    let mut result: String = String::new();
+    for i in stack.iter_mut() {
+        let temp: &str = &i.pop().unwrap().to_string();
+        result = format!("{}{}", result, temp);
+    }
+    println!("{:?}", result);
 }

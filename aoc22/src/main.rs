@@ -181,7 +181,8 @@ fn handle5() {
     println!("{:?}", result); 
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle6() {
     let input = include_str!("../data1.txt");
     let mut n = 14;
     for _ in 0..input.len() - 1 {
@@ -202,4 +203,22 @@ fn main() {
             break;
         }
     }
+}
+
+fn main() {
+    let input: Vec<&str> = include_str!("../data1.txt")
+        .lines()
+        .collect();
+    let col_size = include_str!("../data1.txt")
+        .lines()
+        .count();
+    let mut arr: Vec<Vec<u32>> = vec![vec![]; col_size];
+    let mut counter = 0;
+    for line in input {
+        for c in line.chars() {
+            arr[counter].push(c.to_digit(10).unwrap());
+        }
+        counter += 1;
+    }
+    println!("{:?}", arr);
 }

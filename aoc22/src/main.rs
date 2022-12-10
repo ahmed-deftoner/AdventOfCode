@@ -205,7 +205,8 @@ fn handle6() {
     }
 }
 
-fn main() {
+#[allow(dead_code)]
+fn handle8() {
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
@@ -236,8 +237,6 @@ fn main() {
                 }
                 row -= 1;
             }
-            //up = i as i32 - row;
-            // check down
             row = (i + 1).try_into().unwrap();
             while row < col_size.try_into().unwrap() {
                 down += 1;
@@ -246,8 +245,6 @@ fn main() {
                 }
                 row += 1;
             }
-            //down = (row - 1) - i as i32;
-            // check right
             let mut col: i32 = (j + 1).try_into().unwrap();
             while col < arr[i].len().try_into().unwrap() {
                 right += 1;
@@ -256,8 +253,6 @@ fn main() {
                 }
                 col += 1;
             }
-            //right = col - j as i32;
-            // check left
             col = (j - 1).try_into().unwrap();
             while col > -1 {
                 left += 1;
@@ -266,13 +261,15 @@ fn main() {
                 }
                 col -= 1;
             }
-            //left = j as i32 - (col + 1);
             let local_score = left * right * up * down;
             if local_score > max_score {
                 max_score = local_score; 
-               // print!("{:?}", arr[i][j]);
             }
         }
     }
     println!("{:?}", max_score);
+}
+
+fn main() {
+    
 }

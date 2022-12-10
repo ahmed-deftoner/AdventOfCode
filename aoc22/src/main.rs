@@ -220,56 +220,59 @@ fn main() {
         }
         counter += 1;
     }
-    let mut total = (col_size as u32 * 2) + ((arr[0].len() as u32 - 2) * 2);
-    println!("{:?}",total);
+    let mut max_score: u32 = 0;
     for i in 1..col_size-1 {
         for j in 1..arr[i].len() - 1 {
             // check up
             let mut row: i32 = (i - 1).try_into().unwrap();
-            let mut up = true;
-            let mut down = true;
-            let mut left = true;
-            let mut right = true;
+            let mut up: u32 = 0;
+            let mut down: u32 = 0;
+            let mut left: u32 = 0;
+            let mut right: u32 = 0;
             while row > -1 {
+                up += 1;
                 if arr[row as usize][j] >= arr[i][j] {
-                    up = false;
                     break;
                 }
                 row -= 1;
             }
+            //up = i as i32 - row;
             // check down
             row = (i + 1).try_into().unwrap();
             while row < col_size.try_into().unwrap() {
+                down += 1;
                 if arr[row as usize][j] >= arr[i][j] {
-                    down = false;
                     break;
                 }
                 row += 1;
             }
+            //down = (row - 1) - i as i32;
             // check right
             let mut col: i32 = (j + 1).try_into().unwrap();
             while col < arr[i].len().try_into().unwrap() {
+                right += 1;
                 if arr[i][col as usize] >= arr[i][j] {
-                    right = false;
                     break;
                 }
                 col += 1;
             }
+            //right = col - j as i32;
             // check left
             col = (j - 1).try_into().unwrap();
             while col > -1 {
+                left += 1;
                 if arr[i][col as usize] >= arr[i][j] {
-                    left = false;
                     break;
                 }
                 col -= 1;
             }
-            if left | right | up | down {
-                total += 1;
+            //left = j as i32 - (col + 1);
+            let local_score = left * right * up * down;
+            if local_score > max_score {
+                max_score = local_score; 
                // print!("{:?}", arr[i][j]);
             }
         }
-        //println!("{:?}",total);
     }
-    println!("{:?}",total);
+    println!("{:?}", max_score);
 }

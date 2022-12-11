@@ -1,4 +1,4 @@
-use std::{borrow::{BorrowMut, Borrow}, collections::HashMap};
+use std::{borrow::{BorrowMut}, collections::HashMap};
 
 #[allow(dead_code)]
 fn handle1() {
@@ -276,8 +276,9 @@ struct Coord {
     y: u32
 }
 
+#[allow(dead_code)]
 fn handle9() {
-    let input: Vec<&str> = include_str!("../data1.txt")
+    /*let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
     let mut total = 1;
@@ -305,9 +306,42 @@ fn handle9() {
         }
 
     }
-    println!("{:?}",total); 
+    println!("{:?}",total); */
 }
 
 fn main() {
-   
+    let input: Vec<&str> = include_str!("../data1.txt")
+                        .lines()
+                        .collect();
+    let mut cycles = 0;
+    let mut result = 1;
+    let mut total = 0;
+    let cycle_cmp = [20,60,100,140,180,220];
+    let mut counter = 0;
+    let mut temp = 0;
+    for line in input {
+        if cycle_cmp.contains(&cycles) {
+            total += cycles * result;
+            println!("{:?}", result);
+        }
+        if counter == 1 {
+            result += temp;
+            cycles += 1;
+            counter = 0;
+        }
+        if line == "noop" {
+            cycles += 1;
+            if counter == 1 {
+                result += temp;
+                counter = 0;
+            }
+            continue;
+        }
+        let (_, opcode) = line.split_once(" ").unwrap();
+        //println!("{:?},{:?}",operand,opcode);
+        temp = opcode.parse::<i32>().unwrap();
+        counter += 1;
+        cycles += 1;
+    }
+    println!("{:?}", total);
 }

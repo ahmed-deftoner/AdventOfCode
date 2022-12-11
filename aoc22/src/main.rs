@@ -9,8 +9,8 @@ enum FileType {
 struct Node<'a> {
     idx: usize,
     name: &'a str,
-    parent: Option<&'a str>,
-    children: Vec<&'a str>,
+    parent: Option<usize>,
+    children: Vec<usize>,
     size: u32,
     file_type:FileType
 }
@@ -59,7 +59,9 @@ fn main() {
         let cmd: Vec<&str> = line.split_whitespace().collect();
         match cmd[0] {
             "dir" => {
-
+                let dir = tree.add_node(cmd[1], 0, FileType::Directory);
+                tree.tree[dir].parent = Some(pwd);
+                tree.tree[pwd].children.push(dir);
             },
             "$" => {
 

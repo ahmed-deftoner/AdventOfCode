@@ -309,39 +309,50 @@ fn handle9() {
     println!("{:?}",total); */
 }
 
-fn main() {
-    let input: Vec<&str> = include_str!("../data1.txt")
-                        .lines()
-                        .collect();
-    let mut cycles = 0;
-    let mut result = 1;
-    let mut total = 0;
-    let cycle_cmp = [20,60,100,140,180,220];
-    let mut counter = 0;
-    let mut temp = 0;
-    for line in input {
-        if cycle_cmp.contains(&cycles) {
-            total += cycles * result;
-            println!("{:?}", result);
-        }
-        if counter == 1 {
-            result += temp;
-            cycles += 1;
-            counter = 0;
-        }
-        if line == "noop" {
-            cycles += 1;
-            if counter == 1 {
-                result += temp;
-                counter = 0;
+pub struct Signal {
+    cycles: u32,
+    value: i32
+}
+
+fn parse_10(input: &str) -> Vec<Signal> {
+    input
+        .lines()
+        .map(|line| line.split_whitespace())
+        .map(|mut line| {
+            let instruction = line.next().unwrap();
+            let value = match line.next() {
+                Some(value) => value.parse::<i32>().unwrap_or(0_i32),
+                None => 0_i32
+            };
+            match instruction {
+                "noop" => Signal { cycles: 1, value: value },
+                "addx" => Signal { cycles: 2, value: value },
+                _ => panic!("invalid instruction")
             }
-            continue;
+        })
+        .collect()
+}
+
+fn main() {
+    let input: &str = include_str!("../data1.txt");
+    let cycles = vec![20,60,100,140,180,220];
+    let mut register = 1;
+    let mut cycle = 0;
+    let mut signal_strength: Vec<i32> = vec![]; 
+    let signals = parse_10(input);
+
+    for signal in signals {
+        for _ in 0..signal.cycles {
+            cycle += 1;
+            if cycles.contains(&cycle) {
+                signal_strength.push(cycle * register);
+            }
         }
-        let (_, opcode) = line.split_once(" ").unwrap();
-        //println!("{:?},{:?}",operand,opcode);
-        temp = opcode.parse::<i32>().unwrap();
-        counter += 1;
-        cycles += 1;
+        if cycle > 220 {
+            // println!("Above 220");
+            break;
+        }
+        register += signal.value;
     }
-    println!("{:?}", total);
+    println!("{:?}", signal_strength.iter().sum::<i32>());
 }

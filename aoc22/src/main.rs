@@ -1,5 +1,7 @@
+const DISK_SPACE_CAPACITY: u32 = 70_000_000;
+const DISK_SPACE_NEEDED: u32 = 30_000_000;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum FileType {
     Directory,
     File
@@ -52,6 +54,15 @@ impl Tree {
         }
         ret + self.tree[idx].size
     }
+
+    fn get_directories(&self) -> Vec<&Node> {
+        self.tree
+            .iter()
+            .filter(|node| {
+                node.file_type == FileType::Directory
+            })
+            .collect::<Vec<&Node>>()
+    }
 }
 
 fn main() {
@@ -80,7 +91,7 @@ fn main() {
                         current = tree.tree[current].parent.unwrap();
                     } else {
                         let dir = tree.add_node( 
-                            format!("{}{}/", tree.tree[pwd].name.to_owned(), cmd[1].to_owned()),
+                            format!("{}{}/", tree.tree[pwd].name.to_owned(), cmd[2].to_owned()),
                              0, 
                              FileType::Directory);
                         current = dir;
@@ -100,4 +111,25 @@ fn main() {
             }
         }
     }
+    let directories = tree.get_directories();
+    let directory_sizes = directories.iter()
+        .map(|node| {
+            tree.get_directory_size(node.idx)
+        })
+        .filter(|size| {
+            *size <= 100_000
+        })
+        .collect::<Vec<u32>>();
+    println!("{:?}", directory_sizes.iter().sum::<u32>());
+
+    let unused = DISK_SPACE_CAPACITY - tree.get_directory_size(0);
+    let needed = DISK_SPACE_NEEDED - unused;
+    let min_dir = directories.iter()
+        .map(|node| {
+            tree.get_directory_size(node.idx)
+        })
+        .filter(|size| {
+            *size >= needed
+        }).min().unwrap();
+    println!("{:?}", min_dir);
 }

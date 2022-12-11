@@ -44,6 +44,14 @@ impl Tree {
         self.tree.push(Node::new(idx, name, size, file_type));
         idx
     }
+
+    fn get_directory_size(&self, idx: usize) -> u32 {
+        let mut ret = 0;
+        for p in &self.tree[idx].children {
+            ret += self.get_directory_size(*p);
+        }
+        ret + self.tree[idx].size
+    }
 }
 
 fn main() {

@@ -1,9 +1,11 @@
 
+#[derive(Debug)]
 enum FileType {
     Directory,
     File
 }
 
+#[derive(Debug)]
 struct Node<'a> {
     name: &'a str,
     parent: Option<&'a str>,
@@ -24,6 +26,7 @@ impl<'a> Node<'a> {
     }    
 }
 
+#[derive(Debug,Default)]
 pub struct Tree<'a> {
     tree: Vec<Node<'a>>
 }
@@ -41,5 +44,22 @@ impl<'a> Tree<'a> {
 }
 
 fn main() {
-    let input = include_str!("../data1.txt");
+    let input: Vec<&str> = include_str!("../data1.txt")
+        .lines()
+        .skip(2)
+        .collect();
+    let mut tree: Tree = Tree::default();
+    let root = tree.add_node("/", 0, FileType::Directory);
+    for line in &input {
+        let cmd: Vec<&str> = line.split_whitespace().collect();
+        match cmd[0] {
+            "dir" => {
+
+            },
+            "$" => {
+
+            },
+            _ => ()
+        }
+    }
 }

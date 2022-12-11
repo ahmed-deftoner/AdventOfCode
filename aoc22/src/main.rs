@@ -335,24 +335,31 @@ fn parse_10(input: &str) -> Vec<Signal> {
 
 fn main() {
     let input: &str = include_str!("../data1.txt");
-    let cycles = vec![20,60,100,140,180,220];
-    let mut register = 1;
+    let mut crt: Vec<Vec<String>> = vec![vec![]; 6];
+    let mut pixel: i32 = 0;
+    let mut registry: i32 = 1;
     let mut cycle = 0;
-    let mut signal_strength: Vec<i32> = vec![]; 
+    let mut row;
     let signals = parse_10(input);
 
     for signal in signals {
         for _ in 0..signal.cycles {
+            row = cycle / 40;
             cycle += 1;
-            if cycles.contains(&cycle) {
-                signal_strength.push(cycle * register);
+            if (registry - pixel).abs() <= 1 {
+                crt[row].push("#".to_owned());
+            } else {
+                crt[row].push(".".to_owned());
             }
+            pixel += 1;
+            pixel %= 40;
         }
-        if cycle > 220 {
-            // println!("Above 220");
-            break;
-        }
-        register += signal.value;
+        registry += signal.value;
+    };
+
+    for row in crt {
+        println!("{}", row.join(""));
     }
-    println!("{:?}", signal_strength.iter().sum::<i32>());
+    
+    "".to_owned();
 }

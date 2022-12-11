@@ -1,4 +1,4 @@
-use std::{borrow::BorrowMut, collections::HashMap};
+use std::{borrow::{BorrowMut, Borrow}, collections::HashMap};
 
 #[allow(dead_code)]
 fn handle1() {
@@ -270,42 +270,44 @@ fn handle8() {
     println!("{:?}", max_score);
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 struct Coord {
     x: u32,
     y: u32
 }
 
-fn main() {
+fn handle9() {
     let input: Vec<&str> = include_str!("../data1.txt")
         .lines()
         .collect();
     let mut total = 1;
-    let mut count: u32 = 0;
     let mut h_coord: Coord = Coord { x: 0, y: 0 };
     let mut t_coord: Coord = Coord { x: 0, y: 0 }; 
+    let mut visited: Vec<String> = Vec::new();
+    let mut result: &String = &String::new();
     for line in input {
         let (mov, val) = line.split_once(" ")
                                          .unwrap();
         match mov {
             "R" => { 
                 h_coord.x += val.parse::<u32>().unwrap(); 
-                if h_coord.y == t_coord.y {
-                    total += h_coord.x - t_coord.x;
-                } else {
-                    if h_coord.x > t_coord.x + 1 {
-                        total += (h_coord.x) - (t_coord.x + 1);
-                        t_coord.y = h_coord.y;
-                        t_coord.x = h_coord.x - 1;
-                    }
-                }
             },
-            "L" => { h_coord.x -= val.parse::<u32>().unwrap(); },
-            "U" => { h_coord.y += val.parse::<u32>().unwrap(); },
-            "D" => { h_coord.y -= val.parse::<u32>().unwrap(); },
+            "L" => {
+                h_coord.x -= val.parse::<u32>().unwrap(); 
+            },
+            "U" => { 
+                h_coord.y += val.parse::<u32>().unwrap();
+            },
+            "D" => { 
+                h_coord.y -= val.parse::<u32>().unwrap(); 
+            },
             _ => unreachable!()
         }
 
     }
-    println!("{:?}",total);
+    println!("{:?}",total); 
+}
+
+fn main() {
+   
 }

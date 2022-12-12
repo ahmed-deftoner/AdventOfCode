@@ -3,34 +3,36 @@
 #[derive(Debug)]
 struct Monkey {
     idx: usize,
-    items: Vec<u32>,
-    worry: (char, u32),
-    test: u32,
+    items: Vec<u128>,
+    worry: (char, u128),
+    test: u128,
     if_true: usize,
-    if_false: usize
+    if_false: usize,
+    active: u128
 }
 
 impl Monkey {
-    fn throw(&mut self) -> (Vec<usize>, Vec<u32>) {
+    fn throw(&mut self) -> (Vec<usize>, Vec<u128>) {
         let mut inspect: Vec<usize> = Vec::new();
-        let mut item: Vec<u32> = Vec::new();
+        let mut item: Vec<u128> = Vec::new();
         for i in &self.items {
+            self.active += 1;
             let mul = match self.worry.0 {
                 '*' => {
                     match self.worry.1 {
-                        0 => (i * i) / 3,
-                        _ => (i * self.worry.1) / 3
+                        0 => (i * i),
+                        _ => (i * self.worry.1)
                     }
                 },
                 '+' => {
                     match self.worry.1 {
-                        0 => (i + i) / 3,
-                        _ => (i + self.worry.1) / 3
+                        0 => (i + i),
+                        _ => (i + self.worry.1)
                     }
                 },
                 _ => unreachable!()
             };
-            match mul % self.test {
+            match mul % self.test as u128 {
                 0 => inspect.push(self.if_true),
                 _ => inspect.push(self.if_false)
             };
@@ -62,14 +64,14 @@ fn main() {
                     .1
                     .split(", ")
                     .map(|x| {
-                        x.parse::<u32>().unwrap()
+                        x.parse::<u128>().unwrap()
                     })
                     .collect(), 
                 worry: {
                     let mut temp: Vec<&str> = x.next()
                          .unwrap()
                          .split_whitespace().collect();
-                    let x = temp.pop().unwrap().parse::<u32>().unwrap_or(0);
+                    let x = temp.pop().unwrap().parse::<u128>().unwrap_or(0);
                     let y = temp.pop().unwrap().parse::<char>().unwrap();
                     (y, x)
                 },
@@ -78,7 +80,7 @@ fn main() {
                     .split_whitespace()
                     .last()
                     .unwrap()
-                    .parse::<u32>()
+                    .parse::<u128>()
                     .unwrap(),
                 if_true: x.next()
                     .unwrap()
@@ -94,10 +96,11 @@ fn main() {
                     .unwrap()
                     .parse::<usize>()
                     .unwrap(),
+                active: 0,
                 }
         })
         .collect();
-    for _ in 0..2 {
+    for _ in 0..10000 {
         for j in 0..monke.len() {
             let (to, item) = monke[j].throw();
             for k in 0..to.len() {
@@ -105,6 +108,12 @@ fn main() {
                 monke[to[k]].items.push(item[k]);
             }
         }
-        println!("{:?}", monke[0].items);
+        println!("{:?}", monke[0].active);
+
     }
+    let mut mb: Vec<u128> = monke.iter()
+        .map(|x| x.active)
+        .collect();
+    mb.sort();
+    println!("{:?}", mb.pop().unwrap());
 }

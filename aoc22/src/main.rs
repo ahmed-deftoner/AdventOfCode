@@ -1,135 +1,119 @@
-const DISK_SPACE_CAPACITY: u32 = 70_000_000;
-const DISK_SPACE_NEEDED: u32 = 30_000_000;
 
-#[derive(Debug, PartialEq)]
-enum FileType {
-    Directory,
-    File
-}
 
 #[derive(Debug)]
-struct Node {
+struct Monkey {
     idx: usize,
-    name: String,
-    parent: Option<usize>,
-    children: Vec<usize>,
-    size: u32,
-    file_type:FileType
+    items: Vec<u128>,
+    worry: (char, u128),
+    test: u128,
+    if_true: usize,
+    if_false: usize,
+    active: u128
 }
 
-impl Node {
-    fn new(idx: usize, name: String, size: u32, file_type: FileType) -> Self {
-        Self { 
-            idx: idx,
-            name: name,
-            parent: None,
-            children: vec![],
-            size: size,
-            file_type: file_type
+impl Monkey {
+    fn throw(&mut self) -> (Vec<usize>, Vec<u128>) {
+        let mut inspect: Vec<usize> = Vec::new();
+        let mut item: Vec<u128> = Vec::new();
+        for i in &self.items {
+            self.active += 1;
+            let mul = match self.worry.0 {
+                '*' => {
+                    match self.worry.1 {
+                        0 => (i * i),
+                        _ => (i * self.worry.1)
+                    }
+                },
+                '+' => {
+                    match self.worry.1 {
+                        0 => (i + i),
+                        _ => (i + self.worry.1)
+                    }
+                },
+                _ => unreachable!()
+            };
+            match mul % self.test as u128 {
+                0 => inspect.push(self.if_true),
+                _ => inspect.push(self.if_false)
+            };
+            item.push(mul);
         }
-    }    
-}
-
-#[derive(Debug,Default)]
-pub struct Tree {
-    tree: Vec<Node>
-}
-
-impl Tree {
-    fn add_node(&mut self, name: String, size: u32, file_type: FileType) -> usize {
-        for node in &self.tree  {
-            if node.name == name {
-                return node.idx;
-            }
-        }
-        let idx = self.tree.len();
-        self.tree.push(Node::new(idx, name, size, file_type));
-        idx
-    }
-
-    fn get_directory_size(&self, idx: usize) -> u32 {
-        let mut ret = 0;
-        for p in &self.tree[idx].children {
-            ret += self.get_directory_size(*p);
-        }
-        ret + self.tree[idx].size
-    }
-
-    fn get_directories(&self) -> Vec<&Node> {
-        self.tree
-            .iter()
-            .filter(|node| {
-                node.file_type == FileType::Directory
-            })
-            .collect::<Vec<&Node>>()
+        (inspect, item)
     }
 }
 
 fn main() {
-    let input: Vec<&str> = include_str!("../data1.txt")
-        .lines()
-        .skip(2)
-        .collect();
-    let mut tree: Tree = Tree::default();
-    let root = tree.add_node("/".to_owned(), 0, FileType::Directory);
-    let mut pwd = root;
-    let mut current = root;
-    for line in &input {
-        let cmd: Vec<&str> = line.split_whitespace().collect();
-        match cmd[0] {
-            "dir" => {
-                let dir = tree.add_node( 
-                         format!("{}{}/", tree.tree[pwd].name.to_owned(), cmd[1].to_owned()),
-                    0, 
-                         FileType::Directory) ;
-                tree.tree[dir].parent = Some(pwd);
-                tree.tree[pwd].children.push(dir);
-            },
-            "$" => {
-                if cmd[1] == "cd" {
-                    if cmd[2] == ".." {
-                        current = tree.tree[current].parent.unwrap();
-                    } else {
-                        let dir = tree.add_node( 
-                            format!("{}{}/", tree.tree[pwd].name.to_owned(), cmd[2].to_owned()),
-                             0, 
-                             FileType::Directory);
-                        current = dir;
-                    }
-                    pwd = current;
+    let mut monke: Vec<Monkey> = include_str!("../data1.txt")
+        .split("\n\n")
+        .map(|line| {
+            let mut x = line.trim_start()
+                .split("\n");
+            Monkey { 
+                idx: x.next()
+                    .unwrap()
+                    .split_once(" ")
+                    .unwrap()
+                    .1
+                    .trim_end_matches(":")
+                    .parse::<usize>()
+                    .unwrap_or(0),
+                items: x.next()
+                    .unwrap()
+                    .split_once(": ")
+                    .unwrap()
+                    .1
+                    .split(", ")
+                    .map(|x| {
+                        x.parse::<u128>().unwrap()
+                    })
+                    .collect(), 
+                worry: {
+                    let mut temp: Vec<&str> = x.next()
+                         .unwrap()
+                         .split_whitespace().collect();
+                    let x = temp.pop().unwrap().parse::<u128>().unwrap_or(0);
+                    let y = temp.pop().unwrap().parse::<char>().unwrap();
+                    (y, x)
+                },
+                test: x.next()
+                    .unwrap()
+                    .split_whitespace()
+                    .last()
+                    .unwrap()
+                    .parse::<u128>()
+                    .unwrap(),
+                if_true: x.next()
+                    .unwrap()
+                    .split_whitespace()
+                    .last()
+                    .unwrap()
+                    .parse::<usize>()
+                    .unwrap(), 
+                if_false: x.next()
+                    .unwrap()
+                    .split_whitespace()
+                    .last()
+                    .unwrap()
+                    .parse::<usize>()
+                    .unwrap(),
+                active: 0,
                 }
-            },
-            _ => {
-                let file_size = cmd[0].parse::<u32>().unwrap();
-                let file = tree.add_node(
-                    format!("{}{}", tree.tree[current].name, cmd[1]),
-                      file_size,
-                      FileType::File
-                    );
-                tree.tree[current].children.push(file);
-                tree.tree[file].parent = Some(current);
+        })
+        .collect();
+    for _ in 0..10000 {
+        for j in 0..monke.len() {
+            let (to, item) = monke[j].throw();
+            for k in 0..to.len() {
+                monke[j].items.clear();
+                monke[to[k]].items.push(item[k]);
             }
         }
-    }
-    let directories = tree.get_directories();
-    let directory_sizes = directories.iter()
-        .map(|node| {
-            tree.get_directory_size(node.idx)
-        })
-        .filter(|size| {
-            *size <= 100_000
-        })
-        .collect::<Vec<u32>>();
-    println!("{:?}", directory_sizes.iter().sum::<u32>());
+        println!("{:?}", monke[0].active);
 
-    let unused = DISK_SPACE_CAPACITY - tree.get_directory_size(0);
-    let needed = DISK_SPACE_NEEDED - unused;
-    let min_dir = directories.iter()
-        .map(|node| {
-            tree.get_directory_size(node.idx)
-        })
-        .filter(|size| {
-            *size >= needed
-        }).min().unwrap();
-    println!("{:?}", min_dir);
+    }
+    let mut mb: Vec<u128> = monke.iter()
+        .map(|x| x.active)
+        .collect();
+    mb.sort();
+    println!("{:?}", mb.pop().unwrap());
 }

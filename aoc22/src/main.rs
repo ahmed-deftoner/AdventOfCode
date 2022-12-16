@@ -1,79 +1,53 @@
 use std::collections::{HashMap, HashSet};
 
 
-
-fn main() {
-    let mut x = 500;
-    let mut y = 0;
-    let mut sand = 0;
-    let mut max_y = 0;
-    let mut cave: HashMap<u32, HashSet<u32>> = HashMap::new();
-    include_str!("../data1.txt")
-        .split("\n")
-        .for_each(|line| {
-            line.split(" -> ")
-                .map(|pair| {
-                    let (x, y) = pair.split_once(",").unwrap();
-                    println!("{:?} -> {:?}",x, y);
-                    (x.parse::<u32>().unwrap(), y.parse::<u32>().unwrap())
-                 })
-                 .collect::<Vec<(u32,u32)>>()
-                 .windows(2)
-                 .into_iter()
-                 .for_each(|window| {
-                    let start = window[0];
-                    let end = window[1];
-                    if start.0 == end.0 {
-                        if end.1 > start.1 {
-                            if end.1 > max_y {
-                                max_y = end.1;
-                            }
-                            (start.1..=end.1).for_each(|y| {
-                                cave.entry(start.0).or_default().insert(y);
-                            })
-                        } else {
-                            if start.1 > max_y {
-                                max_y = start.1;
-                            }
-                            (end.1..=start.1).for_each(|y| {
-                                cave.entry(start.0).or_default().insert(y);
-                            })
-                        }
-                    } else if start.1 == end.1 {
-                        if start.0 > end.0 {
-                            (end.0..=start.0).for_each(|x| {
-                                cave.entry(x).or_default().insert(start.1);                    
-                            })
-                        } else {
-                            (start.0..=end.0).for_each(|x| {
-                                cave.entry(x).or_default().insert(start.1);               
-                            })
-                        }
-                    }
-                 })
-        });
-    loop {
-        if cave.get(&x).is_some() && cave.get(&x).unwrap().get(&(y + 1)).is_some() {
-            if cave.get(&(x - 1)).is_none() && cave.get(&(x - 1)).unwrap().get(&(y + 1)).is_some() {
-                if cave.get(&(x + 1)).is_some() && cave.get(&(x + 1)).unwrap().get(&(y + 1)).is_some() {
-                    sand += 1;
-                    if x == 500 && y == 1 {
-                        break;
-                    }
-                    cave.get_mut(&x).unwrap().insert(y);
-                    x = 500;
-                    y = 0;
-                } else {
-                    x += 1;
-                    y += 1;
-                }
-            } else {
-                x -= 1;
-                y += 1;
-            }
-        } else {
-            y += 1;
+fn fill_between(first: &str, second: &str, set: &mut [[bool; 200]; 1000]) {
+    let first = first.split(',').map(|s| s.parse::<usize>().unwrap()).collect::<Vec<_>>();
+    let second = second.split(',').map(|s| s.parse::<usize>().unwrap()).collect::<Vec<_>>();
+    let (lower_x, higher_x) = if first[0] < second[0] { (first[0], second[0]) } else { (second[0], first[0]) };
+    let (lower_y, higher_y) = if first[1] < second[1] { (first[1], second[1]) } else { (second[1], first[1]) };
+    for x in lower_x..=higher_x {
+        for y in lower_y..=higher_y {
+            set[x][y] = true
         }
     }
-    println!("{:?}", max_y);
+}
+
+fn simulate_sand(mut rocks: [[bool; 200]; 1000], lowest: usize, floor: bool) -> usize {
+    if floor { rocks.iter_mut().for_each(|c| c[lowest + 2] = true) }
+    let mut sand_count = 0;
+    'sand: loop {
+        let mut sand: (usize, usize) = (500, 0);
+        'fall: loop {
+            if !rocks[sand.0][sand.1 + 1] { sand.1 += 1 }
+            else if !rocks[sand.0 - 1][sand.1 + 1] { sand.0 -= 1; sand.1 += 1 }
+            else if !rocks[sand.0 + 1][sand.1 + 1] { sand.0 += 1; sand.1 += 1 }
+            else if floor && sand == (500, 0) { sand_count += 1; break 'sand }
+            else { rocks[sand.0][sand.1] = true; break 'fall }
+
+            if sand.1 > lowest && !floor { break 'sand } 
+        }
+        sand_count += 1;
+    }
+    sand_count
+}
+
+fn main() {
+    let now = std::time::Instant::now();
+    let input = include_str!("../data1.txt");
+    let mut rocks = [[false; 200]; 1000];
+
+    for line in input.lines() {
+        for endpoints in line.split(" -> ").collect::<Vec<&str>>().windows(2) {
+            if let [first, second] = endpoints {
+                fill_between(first, second, &mut rocks);
+            }
+        }
+    }
+
+    let lowest = rocks.iter().map(|c| c.iter().enumerate().filter(|(_, f)| **f).map(|(i, _)| i).max().unwrap_or(0)).max().unwrap();
+    let part1 = simulate_sand(rocks.clone(), lowest, false);
+    let part2 =  simulate_sand(rocks, lowest, true);
+
+    println!("Part 1: {part1}, Part 2: {part2} in {:#?}", now.elapsed());
 }

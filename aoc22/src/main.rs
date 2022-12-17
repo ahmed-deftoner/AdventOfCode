@@ -4,7 +4,7 @@ use std::i32;
 struct Sensor {
     x: i32,
     y: i32,
-    radius: i32
+    radius: u32
 }
 
 #[derive(Debug)]
@@ -17,7 +17,6 @@ fn main() {
     let inp: Vec<&str> = include_str!("../data1.txt")
         .split("\n")
         .map(|line| {
-            println!("{:?}", line);
             let (s, b) = line.split_once(":").unwrap();
             let (sx, sy) = s.split_once("Sensor at ")
                 .unwrap()
@@ -33,12 +32,13 @@ fn main() {
                 x: bx.replace("x=", "").parse::<i32>().unwrap(),
                 y: by.replace("y=", "").parse::<i32>().unwrap(),
             };
-            let sensor = Sensor {
+            let mut sensor = Sensor {
                 x: sx.replace("x=", "").parse::<i32>().unwrap(),
                 y: sy.replace("y=", "").parse::<i32>().unwrap(),
                 radius: 1,
             };
-            println!("{:?}", beacon);
+            sensor.radius = beacon.x.abs_diff(sensor.x) + beacon.y.abs_diff(sensor.y);
+            println!("{:?}", sensor);
             sy
         })
         .collect();
